@@ -14,6 +14,10 @@ dependencies:
 
   # Utility Packages
   flutter_dotenv: ^5.2.1
+  url_launcher: ^6.3.1
+  intl: ^0.20.2
+  get_storage: ^2.1.1
+  logger: ^2.5.0
 
   # State Management
   get: ^4.7.2
@@ -21,10 +25,6 @@ dependencies:
 
   # Icons
   cupertino_icons: ^1.0.8
-  url_launcher: ^6.3.1
-  intl: ^0.20.2
-  get_storage: ^2.1.1
-  logger: ^2.5.0
 
   # Product Specific
 
@@ -41,17 +41,11 @@ flutter:
   uses-material-design: true
 
 #--------------- LOCAL ASSETS ------------------#
-  # assets:
-  #     - assets/logos/
-  #     - assets/icons/brands/
-  #     - assets/images/content/
-  #     - assets/images/banners/
-  #     - assets/images/reviews/
-  #     - assets/images/products/
-  #     - assets/icons/categories/
-  #     - assets/images/animations/
-  #     - assets/icons/payment_methods/
-  #     - assets/images/on_boarding_images/
+  assets:
+      - assets/fonts/
+      - assets/icons/
+      - assets/images/
+      - assets/logos/
 
 #--------------- LOCAL FONTS ------------------#
   fonts:
