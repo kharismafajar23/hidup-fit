@@ -2,7 +2,8 @@
 
 /// This class contains all the App Images in String formats.
 class CustomImages {
-  // // -- App Logos
+  // -- App Logos
+  static const String appLogo = 'assets/logos/logo.png';
   // static const String darkAppLogo = "assets/logos/t-store-splash-logo-black.png";
   // static const String lightAppLogo = "assets/logos/t-store-splash-logo-white.png";
 

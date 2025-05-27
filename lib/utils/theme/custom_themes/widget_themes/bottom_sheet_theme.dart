@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
 
-class TBottomSheetTheme {
-  TBottomSheetTheme._();
+class CustomBottomSheetTheme {
+  CustomBottomSheetTheme._();
 
   static BottomSheetThemeData lightBottomSheetTheme = BottomSheetThemeData(
     showDragHandle: true,
