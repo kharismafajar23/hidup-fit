@@ -1,23 +1,17 @@
+import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/get_utils.dart';
 import 'package:hidup_fit/common/widgets/form_input.dart';
-import 'package:hidup_fit/features/authentication/screens/signup.dart';
+import 'package:hidup_fit/common/widgets/form_input_date.dart';
+import 'package:hidup_fit/features/authentication/screens/login.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
-import 'package:hidup_fit/utils/constant/sizes.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
 import 'package:hidup_fit/utils/theme/custom_themes/text_styles.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Signup extends StatelessWidget {
+  const Signup({super.key});
 
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,8 +28,8 @@ class _LoginState extends State<Login> {
                   children: [
                     Image.asset(
                       CustomImages.appLogo,
-                      height: 150,
-                      width: 150,
+                      height: 120,
+                      width: 120,
                       fit: BoxFit.contain,
                     ),
                     Text(
@@ -43,21 +37,29 @@ class _LoginState extends State<Login> {
                       style: CustomTextStyles.headingText,
                     ).marginOnly(bottom: 38),
                     Text(
-                      CustomTexts.login,
+                      CustomTexts.signUp,
                       style: CustomTextStyles.paragraphText,
                     ).marginOnly(bottom: 20),
+                    FormInput(label: CustomTexts.masukkanNama),
+                    InkWell(
+                        onTap: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          showDatePicker(
+                            context: context,
+                            // initialDate: controller.selectedDate.value,
+                            firstDate: DateTime(1950, 1, 1),
+                            lastDate: DateTime.now().add(const Duration(days: 365)),
+                            initialEntryMode: DatePickerEntryMode.calendarOnly,
+                          );
+                        },
+                        child: FormInputDate(
+                          label: CustomTexts.masukkanTanggalLahir,
+                          enabled: false,
+                        )),
                     FormInput(label: CustomTexts.masukkanEmail),
                     FormInput(
                       label: CustomTexts.masukkanKataSandi,
                       isPassword: true,
-                    ),
-                    SizedBox(
-                      width: CustomDeviceUtils.getScreenWidth(context),
-                      child: Text(
-                        CustomTexts.lupaKataSandi,
-                        style: TextStyle(),
-                        textAlign: TextAlign.right,
-                      ).marginOnly(bottom: 26),
                     ),
                     SizedBox(
                       width: CustomDeviceUtils.getScreenWidth(context) * 3 / 5,
@@ -74,9 +76,9 @@ class _LoginState extends State<Login> {
                         Text(CustomTexts.belumPunyaAkun).marginOnly(right: 8),
                         GestureDetector(
                           onTap: () {
-                            Get.to(Signup());
+                            Get.back();
                           },
-                          child: Text(CustomTexts.daftarSekarang),
+                          child: Text(CustomTexts.masukSekarang),
                         )
                       ],
                     )

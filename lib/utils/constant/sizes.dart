@@ -48,6 +48,7 @@ class CustomSizes {
   static const double productItemHeight = 160.0;
 
   // Input field
+  static const double inputFieldHeight = 55.0;
   static const double inputFieldRadius = 12.0;
   static const double spaceBtwInputFields = 16.0;
 

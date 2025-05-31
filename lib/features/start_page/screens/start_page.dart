@@ -36,7 +36,7 @@ class StartPage extends StatelessWidget {
                 width: CustomDeviceUtils.getScreenWidth(context) * 3 / 5,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(Login());
+                    Get.off(Login());
                   },
                   child: Text(CustomTexts.mulai),
                 ),
