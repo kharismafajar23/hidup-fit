@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/common/widgets/form_input.dart';
 import 'package:hidup_fit/features/authentication/screens/signup.dart';
+import 'package:hidup_fit/navigation_menu.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
@@ -60,7 +61,7 @@ class _LoginState extends State<Login> {
                       width: CustomDeviceUtils.getScreenWidth(context) * 3 / 5,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Get.to(Signup());
+                          Get.to(NavigationMenu());
                         },
                         child: Text(CustomTexts.masuk),
                       ),
