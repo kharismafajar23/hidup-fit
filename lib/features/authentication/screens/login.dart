@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/get_utils.dart';
 import 'package:hidup_fit/common/widgets/form_input.dart';
 import 'package:hidup_fit/features/authentication/screens/signup.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
-import 'package:hidup_fit/utils/constant/sizes.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
 import 'package:hidup_fit/utils/theme/custom_themes/text_styles.dart';

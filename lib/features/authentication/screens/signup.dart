@@ -1,9 +1,8 @@
-import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/common/widgets/form_input.dart';
 import 'package:hidup_fit/common/widgets/form_input_date.dart';
-import 'package:hidup_fit/features/authentication/screens/login.dart';
+import 'package:hidup_fit/features/authentication/controllers/signup_controller.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
@@ -14,6 +13,9 @@ class Signup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final controller = Get.put(SignupController());
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,7 +69,7 @@ class Signup extends StatelessWidget {
                         onPressed: () {
                           // Get.to(Signup());
                         },
-                        child: Text(CustomTexts.masuk),
+                        child: Text('DAFTAR'),
                       ),
                     ).marginOnly(bottom: 18),
                     Row(
