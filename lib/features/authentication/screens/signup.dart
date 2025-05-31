@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hidup_fit/common/widgets/form_input.dart';
 import 'package:hidup_fit/common/widgets/form_input_date.dart';
 import 'package:hidup_fit/features/authentication/controllers/signup_controller.dart';
+import 'package:hidup_fit/features/authentication/screens/otp.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
@@ -67,7 +68,7 @@ class Signup extends StatelessWidget {
                       width: CustomDeviceUtils.getScreenWidth(context) * 3 / 5,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Get.to(Signup());
+                          Get.to(OtpScreen());
                         },
                         child: Text('DAFTAR'),
                       ),
