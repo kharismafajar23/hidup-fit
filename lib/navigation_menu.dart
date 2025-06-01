@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hidup_fit/features/consultation/screens/consultation_screen.dart';
 import 'package:hidup_fit/features/news/screens/news_screen.dart';
+import 'package:hidup_fit/features/profile/screens/profile_screen.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
 import 'package:hidup_fit/utils/constant/sizes.dart';
 
@@ -19,7 +20,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
     Center(child: Text('Add Page')),
     ConsultationScreen(),
     NewsScreen(),
-    Center(child: Text('Profile Page')),
+    ProfileScreen(),
   ];
 
   @override

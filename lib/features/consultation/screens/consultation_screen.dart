@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/common/widgets/doctor_card.dart';
-import 'package:hidup_fit/common/widgets/news_card.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
