@@ -47,6 +47,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/news/
+    - assets/images/doctors/
     - assets/logos/
 
 #--------------- LOCAL FONTS ------------------#

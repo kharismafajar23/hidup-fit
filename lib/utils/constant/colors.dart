@@ -5,6 +5,7 @@ class CustomColors {
   static const Color primary = Color.fromRGBO(166, 172, 222, 1);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
+  static const Color gold = Color.fromRGBO(196, 170, 110, 1);
 
   // Text colors
   static const Color textPrimary = Color(0xFF0F3353);

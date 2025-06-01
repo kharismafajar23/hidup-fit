@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
+import 'package:hidup_fit/utils/constant/fonts.dart';
 import 'package:hidup_fit/utils/constant/sizes.dart';
 
 /* -- Light & Dark Elevated Button Themes -- */
@@ -16,7 +17,7 @@ class CustomElevatedButtonTheme {
       disabledBackgroundColor: CustomColors.buttonDisabled,
       side: const BorderSide(color: CustomColors.primary),
       padding: const EdgeInsets.symmetric(vertical: CustomSizes.buttonHeight),
-      textStyle: const TextStyle(fontSize: 16, color: CustomColors.textWhite, fontWeight: FontWeight.w600),
+      textStyle: const TextStyle(fontSize: 16, color: CustomColors.textWhite, fontWeight: FontWeight.w600, fontFamily: AppFonts.primaryFont),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(CustomSizes.buttonRadius)),
     ),
   );
