@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hidup_fit/features/consultation/screens/consultation_screen.dart';
+import 'package:hidup_fit/features/home/screens/home_screen.dart';
 import 'package:hidup_fit/features/news/screens/news_screen.dart';
 import 'package:hidup_fit/features/profile/screens/profile_screen.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
@@ -16,7 +17,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    Center(child: Text('Home Page')),
+    HomeScreen(),
     Center(child: Text('Add Page')),
     ConsultationScreen(),
     NewsScreen(),
