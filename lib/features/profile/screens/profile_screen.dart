@@ -186,29 +186,38 @@ class ProfileScreen extends StatelessWidget {
                               width: double.infinity,
                               child: ElevatedButton(
                                   onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                  ),
                                   child: Text(
                                     'Edit Profil',
-                                    style: TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                                   )),
-                            ).marginOnly(bottom: 8),
+                            ).marginOnly(bottom: 5),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                   onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                  ),
                                   child: Text(
                                     'Bahasa Aplikasi',
-                                    style: TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                                   )),
-                            ).marginOnly(bottom: 8),
+                            ).marginOnly(bottom: 5),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                   onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 12),
+                                  ),
                                   child: Text(
                                     'Keluar',
-                                    style: TextStyle(fontStyle: FontStyle.italic),
+                                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                                   )),
-                            ).marginOnly(bottom: 8),
+                            ).marginOnly(bottom: 5),
                           ],
                         ),
                       )
