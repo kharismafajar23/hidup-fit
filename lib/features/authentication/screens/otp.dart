@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hidup_fit/common/widgets/back_button.dart';
 import 'package:hidup_fit/features/authentication/screens/login.dart';
 import 'package:hidup_fit/utils/constant/sizes.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
@@ -22,10 +23,7 @@ class OtpScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.arrow_back,
-                    size: CustomSizes.iconLg,
-                  ),
+                  CustomBackButton(),
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,

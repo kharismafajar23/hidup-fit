@@ -43,10 +43,11 @@ flutter:
 
 #--------------- LOCAL ASSETS ------------------#
   assets:
-      - assets/fonts/
-      - assets/icons/
-      - assets/images/
-      - assets/logos/
+    - assets/fonts/
+    - assets/icons/
+    - assets/images/
+    - assets/images/news/
+    - assets/logos/
 
 #--------------- LOCAL FONTS ------------------#
   fonts:

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hidup_fit/common/widgets/news_card.dart';
+import 'package:hidup_fit/features/news/screens/detail_news_screen.dart';
 import 'package:hidup_fit/utils/constant/image_strings.dart';
 import 'package:hidup_fit/utils/constant/text_strings.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
@@ -40,7 +42,30 @@ class NewsScreen extends StatelessWidget {
                     'Artikel Pilihan',
                     textAlign: TextAlign.start,
                     style: CustomTextStyles.headingText,
-                  ).marginOnly(bottom: 38),
+                  ).marginOnly(bottom: 16),
+                  Column(
+                    spacing: 12,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(DetailNewsScreen());
+                        },
+                        child: NewsCard(
+                          title: '7 Kebiasaan Pagi yang Bikin Tubuh Lebih Sehat dan Produktif',
+                          linkImage: 'assets/images/news/news1.jpg',
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(DetailNewsScreen());
+                        },
+                        child: NewsCard(
+                          title: 'Kenali Tanda-Tanda Stres dan Cara Mengatasinya',
+                          linkImage: 'assets/images/news/news2.jpg',
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
