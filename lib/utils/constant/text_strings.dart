@@ -1,5 +1,5 @@
 /// This class contains all the App Text in String formats.
-class CustomTexts {
+class MyTexts {
   static const String appName = "HidupFit";
   static const String mulai = "MULAI";
   static const String masuk = "MASUK";

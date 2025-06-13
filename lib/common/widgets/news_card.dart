@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hidup_fit/utils/theme/custom_themes/text_styles.dart';
+import 'package:hidup_fit/utils/theme/widget_themes/text_styles.dart';
 
 class NewsCard extends StatelessWidget {
   final String title, linkImage;
@@ -28,7 +28,7 @@ class NewsCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
               child: Text(
                 title,
-                style: CustomTextStyles.paragraphText,
+                style: MyTextStyles.paragraphText,
               ),
             )
           ],

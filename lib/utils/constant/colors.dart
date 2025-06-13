@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomColors {
+class MyColors {
   // App theme colors
   static const Color primary = Color.fromRGBO(166, 172, 222, 1);
   static const Color secondary = Color(0xFFFFE24B);
@@ -19,7 +19,7 @@ class CustomColors {
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF6F6F6);
-  static Color darkContainer = CustomColors.white.withOpacity(0.1);
+  static Color darkContainer = MyColors.white.withOpacity(0.1);
 
   // Button colors
   static const Color buttonPrimary = Color(0xFF4b68ff);

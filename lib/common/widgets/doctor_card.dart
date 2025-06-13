@@ -53,7 +53,7 @@ class DoctorCard extends StatelessWidget {
                     children: [
                       Text(
                         nama,
-                        style: TextStyle(color: CustomColors.gold, fontWeight: FontWeight.bold, fontSize: CustomSizes.fontSizeMd),
+                        style: TextStyle(color: MyColors.gold, fontWeight: FontWeight.bold, fontSize: MySizes.fontSizeMd),
                       ).marginOnly(bottom: 4),
                       Row(
                         children: [
@@ -66,7 +66,7 @@ class DoctorCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               spealisasi,
-                              style: TextStyle(color: CustomColors.gold, fontSize: 12),
+                              style: TextStyle(color: MyColors.gold, fontSize: 12),
                             ),
                           ),
                         ],
@@ -81,7 +81,7 @@ class DoctorCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               pengalaman,
-                              style: TextStyle(color: CustomColors.gold, fontSize: 12),
+                              style: TextStyle(color: MyColors.gold, fontSize: 12),
                             ),
                           ),
                         ],
@@ -96,7 +96,7 @@ class DoctorCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               rating,
-                              style: TextStyle(color: CustomColors.gold, fontSize: 12),
+                              style: TextStyle(color: MyColors.gold, fontSize: 12),
                             ),
                           ),
                         ],
@@ -111,7 +111,7 @@ class DoctorCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               status,
-                              style: TextStyle(color: CustomColors.gold, fontSize: 12),
+                              style: TextStyle(color: MyColors.gold, fontSize: 12),
                             ),
                           ),
                         ],
@@ -124,8 +124,8 @@ class DoctorCard extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                side: BorderSide(color: CustomColors.gold),
-                backgroundColor: CustomColors.gold,
+                side: BorderSide(color: MyColors.gold),
+                backgroundColor: MyColors.gold,
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),

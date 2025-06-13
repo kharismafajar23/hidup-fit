@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hidup_fit/features/start_page/screens/start_page.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:hidup_fit/routes/app_pages.dart';
+import 'package:hidup_fit/routes/app_routes.dart';
 import 'package:hidup_fit/utils/theme/theme.dart';
 
-void main() {
-  runApp(const App());
+void main() async {
+  await GetStorage.init();
+  runApp(App());
 }
 
 class App extends StatelessWidget {
@@ -14,10 +17,11 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       themeMode: ThemeMode.system,
-      theme: CustomAppTheme.lightTheme,
-      // darkTheme: CustomAppTheme.darkTheme,
+      theme: MyAppTheme.lightTheme,
+      // darkTheme: MyAppTheme.darkTheme, // Aktifkan jika ingin menggunakan mode malam,
       debugShowCheckedModeBanner: false,
-      home: const StartPage(),
+      initialRoute: AppRoutes.splashScreen,
+      getPages: AppPages.pages,
     );
   }
 }

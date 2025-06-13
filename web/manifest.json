@@ -1,6 +1,6 @@
 {
-    "name": "hidup_fit",
-    "short_name": "hidup_fit",
+    "name": "my_flutter",
+    "short_name": "my_flutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

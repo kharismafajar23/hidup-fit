@@ -14,8 +14,8 @@ class CustomBackButton extends StatelessWidget {
         child: Container(
           height: 40,
           width: 40,
-          color: CustomColors.primary,
-          child: Icon(Icons.arrow_back, color: CustomColors.white),
+          color: MyColors.primary,
+          child: Icon(Icons.arrow_back, color: MyColors.white),
         ),
       ),
     );
