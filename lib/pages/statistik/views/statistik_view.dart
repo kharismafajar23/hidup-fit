@@ -243,15 +243,6 @@ class StatistikView extends GetView<StatistikController> {
               )
             ],
           ).marginOnly(bottom: 40),
-          SizedBox(
-            width: MyDeviceUtils.getScreenWidth(context),
-            child: ElevatedButton(
-              onPressed: () {
-                Get.toNamed(AppRoutes.target);
-              },
-              child: Text('Tracking'),
-            ),
-          ).marginOnly(bottom: 20),
         ],
       ),
     );
