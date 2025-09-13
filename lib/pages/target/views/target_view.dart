@@ -44,13 +44,6 @@ class TargetView extends GetView<TargetController> {
           SizedBox(
             width: MyDeviceUtils.getScreenWidth(context),
             child: ElevatedButton(
-              onPressed: () {},
-              child: Text('+ Tambah'),
-            ),
-          ).marginOnly(bottom: 60),
-          SizedBox(
-            width: MyDeviceUtils.getScreenWidth(context),
-            child: ElevatedButton(
               onPressed: () {
                 Get.toNamed(AppRoutes.hasil);
               },
