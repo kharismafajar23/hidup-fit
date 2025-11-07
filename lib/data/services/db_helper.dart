@@ -21,23 +21,17 @@ class DBHelper {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'app.db'),
-      version: 8, 
+      version: 9, 
       onCreate: (db, version) async {
         await _createTables(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
-        // migrasi versi lama ke baru
         if (oldVersion < 7) {
           await db.execute("ALTER TABLE users ADD COLUMN jenis_kelamin TEXT");
         }
-
-        // Tambah kolom tanggal jika belum ada (versi 8)
-        if (oldVersion < 8) {
-          await db.execute("ALTER TABLE dataKesehatan ADD COLUMN tanggal TEXT DEFAULT (datetime('now'))");
-        }
-
         await _createTables(db);
       },
+
     );
   }
 

@@ -33,8 +33,18 @@ Analisa data kesehatan berikut:
 - Langkah hari ini: $jumlahLangkah langkah
 - Catatan: $catatan
 
-Berikan ringkasan singkat dalam bahasa Indonesia, sebutkan kemungkinan masalah, 
-dan berikan saran sederhana (hindari diagnosis medis). Berikan dalam bentuk paragraf.
+Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kategori kurus, ideal, gemuk atau obesitas. Lalu apakah tekanan darah normal, tinggi atau rendah. Detak jantung apakah lambat, sedang atau cepat. Tinggi badan masuk kategori tinggi atau pendek. Dari semua data kehatan yang diberikan, apakah saya dalam kondisi sehat atau tidak sehat. Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat dan berikan saran sederhana (hindari diagnosis medis). Berikan dalam bentuk json dengan struktur sebagai berikut:
+
+- ringkasan
+-- berat_badan
+-- tekanan_darah
+-- detak_jantung
+-- tinggi_badan
+-- suhu_tubuh
+-- aktivitas_harian
+- kondisi_kesehatan
+- kemungkinan_masalah
+- saran
     ''';
   }
 
