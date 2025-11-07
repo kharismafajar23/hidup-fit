@@ -4,6 +4,6 @@ import 'package:hidup_fit/pages/input_data/controllers/input_data_controller.dar
 class InputDataBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(InputDataController()); // langsung inject, bukan lazy
+    Get.lazyPut(() => InputDataController()); // langsung inject, bukan lazy
   }
 }

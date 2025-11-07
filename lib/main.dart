@@ -6,11 +6,14 @@ import 'package:hidup_fit/routes/app_pages.dart';
 import 'package:hidup_fit/routes/app_routes.dart';
 import 'package:hidup_fit/utils/theme/theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() async {
-  await GetStorage.init();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
   await dotenv.load(fileName: ".env");
-  OpenAI.apiKey = dotenv.env['OPENAI_API_KEY'] ?? "";
+  await GetStorage.init();
+  OpenAI.apiKey = dotenv.env['OPENAI_API_KEY'] ?? '';
   runApp(App());
 }
 

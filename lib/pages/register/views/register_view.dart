@@ -60,6 +60,20 @@ class RegisterView extends GetView<RegisterController> {
                     errorText: !controller.validateTanggalLahir.value ? controller.msgTanggalLahir.value : null,
                   ),
                 ).marginOnly(bottom: 16),
+                Text('Pilih Jenis Kelamin', style: MyTextStyles.labelText).marginOnly(bottom: 4),
+                Obx(() {
+                  return DropdownButtonFormField<String>(
+                    value: controller.selectedGender.value.isEmpty ? null : controller.selectedGender.value,
+                    items: const [
+                      DropdownMenuItem(value: 'Laki-laki', child: Text('Laki-laki')),
+                      DropdownMenuItem(value: 'Perempuan', child: Text('Perempuan')),
+                    ],
+                    onChanged: (value) {
+                      controller.selectedGender.value = value ?? '';
+                    },
+                    decoration: const InputDecoration(hintText: 'Pilih jenis kelamin disini'),
+                  );
+                }).marginOnly(bottom: 12),
                 Text('Masukkan Username', style: MyTextStyles.labelText).marginOnly(bottom: 4),
                 TextField(
                   controller: controller.usernameController,
@@ -98,7 +112,7 @@ class RegisterView extends GetView<RegisterController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Belum Punya Akun?', style: TextStyle(color: MyColors.primary)).marginOnly(right: 8),
+              Text('Sudah Punya Akun?', style: TextStyle(color: MyColors.primary)).marginOnly(right: 8),
               GestureDetector(
                 onTap: () {
                   Get.back();

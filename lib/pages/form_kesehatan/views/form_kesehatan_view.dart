@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/common/widgets/scrollable_widget.dart';
 import 'package:hidup_fit/common/widgets/title_app.dart';
-import 'package:hidup_fit/routes/app_routes.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
 import 'package:hidup_fit/utils/theme/widget_themes/text_styles.dart';
@@ -32,6 +31,7 @@ class FormKesehatanView extends GetView<FormKesehatanController> {
               ).marginOnly(bottom: 20),
               TextField(
                 controller: controller.tanggalController,
+                onChanged: controller.onValidationFormInput,
                 readOnly: true,
                 onTap: () => controller.selectDate(context),
                 decoration: InputDecoration(
@@ -44,32 +44,64 @@ class FormKesehatanView extends GetView<FormKesehatanController> {
                 ),
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Berat Badan (Kg)'),
+                controller: controller.beratBadanController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Berat Badan (Kg)',
+                  errorText: !controller.validateBeratBadan.value ? controller.msgBeratBadan.value : null,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Tekanan Darah (mmHg)'),
+                controller: controller.tekananDarahController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Tekanan Darah (mmHg)',
+                  errorText: !controller.validateTekananDarah.value ? controller.msgTekananDarah.value : null,
+                ),
                 keyboardType: TextInputType.text,
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Detak Jantung (bpm)'),
+                controller: controller.detakJantungController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Detak Jantung (bpm)',
+                  errorText: !controller.validateDetakJantung.value ? controller.msgDetakJantung.value : null,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Tinggi Badan (Cm)'),
+                controller: controller.tinggiBadanController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Tinggi Badan (Cm)',
+                  errorText: !controller.validateTinggiBadan.value ? controller.msgTinggiBadan.value : null,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Suhu Tubuh (^C)'),
+                controller: controller.suhuTubuhController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Suhu Tubuh (^C)',
+                  errorText: !controller.validateSuhuTubuh.value ? controller.msgSuhuTubuh.value : null,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               TextField(
-                decoration: InputDecoration(labelText: 'Jumlah Langkah/ Aktifitas Fisik'),
+                controller: controller.jumlahLangkahController,
+                onChanged: controller.onValidationFormInput,
+                decoration: InputDecoration(
+                  labelText: 'Jumlah Langkah/ Aktifitas Fisik',
+                  errorText: !controller.validateJumlahLangkah.value ? controller.msgJumlahLangkah.value : null,
+                ),
                 keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               SizedBox(
                 height: 140,
                 child: TextField(
+                  controller: controller.catatanController,
+                  onChanged: controller.onValidationFormInput,
                   maxLines: null,
                   expands: true,
                   decoration: InputDecoration(labelText: 'Catatan Tambahan'),
@@ -80,7 +112,7 @@ class FormKesehatanView extends GetView<FormKesehatanController> {
                 width: MyDeviceUtils.getScreenWidth(context),
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.toNamed(AppRoutes.statistikKesehatan);
+                    controller.analisaKesehatan();
                   },
                   child: Text('SIMPAN'),
                 ),

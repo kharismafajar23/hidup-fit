@@ -17,10 +17,14 @@ import 'package:hidup_fit/pages/login/bindings/login_binding.dart';
 import 'package:hidup_fit/pages/login/views/login_view.dart';
 import 'package:hidup_fit/pages/navigation_menu/bindings/navigation_menu_binding.dart';
 import 'package:hidup_fit/pages/navigation_menu/views/navigation_menu_view.dart';
+import 'package:hidup_fit/pages/profile/bindings/edit_profile_binding.dart';
 import 'package:hidup_fit/pages/profile/bindings/profile_binding.dart';
+import 'package:hidup_fit/pages/profile/views/edit_profile_view.dart';
 import 'package:hidup_fit/pages/profile/views/profile_view.dart';
 import 'package:hidup_fit/pages/register/bindings/register_binding.dart';
 import 'package:hidup_fit/pages/register/views/register_view.dart';
+import 'package:hidup_fit/pages/riwayat_kesehatan/bindings/riwayat_kesehatan_binding.dart';
+import 'package:hidup_fit/pages/riwayat_kesehatan/views/riwayat_kesehatan_view.dart';
 import 'package:hidup_fit/pages/splash_screen/bindings/splash_screen_binding.dart';
 import 'package:hidup_fit/pages/splash_screen/views/splash_screen_view.dart';
 import 'package:hidup_fit/pages/statistik/bindings/statistik_bindings.dart';
@@ -70,6 +74,11 @@ class AppPages {
       binding: StatistikBindings(),
     ),
     GetPage(
+      name: AppRoutes.riwayatKesehatan,
+      page: () => RiwayatKesehatanView(),
+      binding: RiwayatKesehatanBinding(),
+    ),
+    GetPage(
       name: AppRoutes.target,
       page: () => TargetView(),
       binding: TargetBinding(),
@@ -88,6 +97,11 @@ class AppPages {
       name: AppRoutes.profile,
       page: () => ProfileView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.editProfile,
+      page: () => EditProfileView(),
+      binding: EditProfileBinding(),
     ),
     GetPage(
       name: AppRoutes.article,

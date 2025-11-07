@@ -25,16 +25,18 @@ class RegisterController extends GetxController {
   RxBool validatePassword = true.obs;
   RxString msgPassword = ''.obs;
 
+  RxString selectedGender = ''.obs;
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
   }
 
-  Future<bool> register(String name, String tanggalLahir, String username, String password) async {
+  Future<bool> register(String name, String tanggalLahir, String username, String password, String jenisKelamin) async {
     final existing = await DBHelper.instance.getUserByUsername(username);
     if (existing != null) return false;
-    await DBHelper.instance.insertUser(name, tanggalLahir, username, password);
+    await DBHelper.instance.insertUser(name, tanggalLahir, username, password, jenisKelamin);
     return true;
   }
 
@@ -97,7 +99,7 @@ class RegisterController extends GetxController {
     isValidateFirst.value = true;
     bool validation = await onValidationFormInput(null);
     if (validation) {
-      bool registerUser = await register(nameController.text, tanggalLahirController.text, usernameController.text, passwordController.text);
+      bool registerUser = await register(nameController.text, tanggalLahirController.text, usernameController.text, passwordController.text, selectedGender.value);
       if (registerUser) {
         Get.offNamed(AppRoutes.verifikasiOTP);
       } else {

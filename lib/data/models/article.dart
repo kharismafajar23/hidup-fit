@@ -12,12 +12,17 @@ class Article {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'id': id,
+    final map = <String, dynamic>{
       'title': title,
       'description': description,
       'imageUrl': imageUrl,
     };
+
+    // hanya tambahkan id kalau memang ada
+    if (id != null) {
+      map['id'] = id;
+    }
+    return map;
   }
 
   factory Article.fromMap(Map<String, dynamic> map) {

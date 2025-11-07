@@ -54,6 +54,19 @@ class InputDataView extends GetView<InputDataController> {
                 style: MyTextStyles.headingText.copyWith(fontSize: 24),
               ),
             ),
+          ).marginOnly(bottom: 12),
+          Card(
+            color: MyColors.accent,
+            child: ListTile(
+              onTap: () {
+                Get.toNamed(AppRoutes.riwayatKesehatan);
+              },
+              leading: Icon(
+                Icons.history_rounded,
+                size: 32,
+              ),
+              title: Text('Lihat riwayat kesehatan'),
+            ),
           )
         ],
       ),
