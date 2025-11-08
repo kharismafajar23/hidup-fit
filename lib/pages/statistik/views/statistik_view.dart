@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hidup_fit/common/widgets/info_badge.dart';
 import 'package:hidup_fit/common/widgets/info_item.dart';
 import 'package:hidup_fit/common/widgets/scrollable_widget.dart';
 import 'package:hidup_fit/common/widgets/title_app.dart';
 import 'package:hidup_fit/data/services/format_tanggal.dart';
+import 'package:hidup_fit/data/services/get_health_color.dart';
 import 'package:hidup_fit/utils/constant/colors.dart';
 import 'package:hidup_fit/utils/device/device_utility.dart';
 import 'package:hidup_fit/utils/theme/widget_themes/text_styles.dart';
@@ -42,7 +44,14 @@ class StatistikView extends GetView<StatistikController> {
             ],
           ).marginOnly(bottom: 20),
           Obx(
-            () => Container(
+            () {
+              if (controller.isLoading.value) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                ).marginOnly(top: 12);
+              }
+
+              return Container(
               width: MyDeviceUtils.getScreenWidth(context),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -132,30 +141,132 @@ class StatistikView extends GetView<StatistikController> {
                   ],
                 ),
               ),
-            ),
+              );
+            },
           ).marginOnly(bottom: 24),
-
-          // Ringkasan Kesehatan
-          Text(
-            'Ringkasan Kesehatan',
-            style: MyTextStyles.headingText.copyWith(
-              color: MyColors.primary,
-              fontSize: 20,
-            ),
-          ).marginOnly(bottom: 2),
           Obx(() {
             if (controller.isLoading.value) {
               return const Center(
                 child: CircularProgressIndicator(),
               ).marginOnly(top: 12);
             }
-            return Text(
-              controller.analysisResult.value.isEmpty ? 'Belum ada analisis.' : controller.analysisResult.value,
-              style: MyTextStyles.paragraphText.copyWith(
-                fontSize: 15,
-                fontStyle: FontStyle.italic,
+
+            final data = controller.analysisResultFormatted.value;
+
+            if (data == null) {
+              return const Text('Belum ada hasil analisis.');
+            }
+
+            return Container(
+              width: MyDeviceUtils.getScreenWidth(context),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
               ),
-            ).marginOnly(top: 8);
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Hasil',
+                      style: MyTextStyles.paragraphText.copyWith(color: MyColors.darkGrey),
+                    ),
+                    const Text(
+                      'Analisa Kesehatan',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey.withValues(alpha: .5),
+                      thickness: 1,
+                    ).marginOnly(bottom: 4),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentGeometry.centerLeft,
+                            child: InfoBadge(
+                              title: 'Kondisi',
+                              subtitle: '${data['kondisi_kesehatan']}',
+                              color: getHealthColor('kondisi_kesehatan', data['kondisi_kesehatan']),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentGeometry.centerLeft,
+                            child: InfoBadge(
+                              title: 'Berat Badan',
+                              subtitle: '${data['ringkasan']['berat_badan']}',
+                              color: getHealthColor('berat_badan', data['ringkasan']['berat_badan']),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ).marginOnly(bottom: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InfoBadge(
+                              title: 'Tekanan Darah',
+                              subtitle: '${data['ringkasan']['tekanan_darah']}',
+                              color: getHealthColor('tekanan_darah', data['ringkasan']['tekanan_darah']),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InfoBadge(
+                              title: 'Detak Jantung',
+                              subtitle: '${data['ringkasan']['detak_jantung']}',
+                              color: getHealthColor('detak_jantung', data['ringkasan']['detak_jantung']),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ).marginOnly(bottom: 24),
+                    const Text(
+                      'Kemungkinan Masalah',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey.withValues(alpha: .5),
+                      thickness: 1,
+                    ),
+                    Text(
+                      data['kemungkinan_masalah'],
+                      style: TextStyle(fontSize: 13, color: const Color.fromARGB(255, 85, 85, 85)),
+                    ).marginOnly(bottom: 12),
+                    const Text(
+                      'Saran',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey.withValues(alpha: .5),
+                      thickness: 1,
+                    ),
+                    Text(
+                      data['saran'],
+                      style: TextStyle(fontSize: 13, color: const Color.fromARGB(255, 85, 85, 85)),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }),
         ],
       ),

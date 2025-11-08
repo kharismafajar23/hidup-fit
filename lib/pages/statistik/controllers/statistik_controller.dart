@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dart_openai/dart_openai.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/data/services/db_helper.dart';
@@ -11,6 +10,7 @@ class StatistikController extends GetxController {
   final isLoading = false.obs;
   final dataKesehatan = <String, dynamic>{}.obs;
   final analysisResult = ''.obs;
+  final analysisResultFormatted = Rxn<Map<String, dynamic>>();
 
   String promptText() {
     final beratBadan = arguments['beratBadan'] ?? 'tidak diberikan';
@@ -22,7 +22,7 @@ class StatistikController extends GetxController {
     final catatan = arguments['catatan'] ?? '-';
 
     return '''
-Anda adalah asisten kesehatan yang sangat membantu, tetapi bukan dokter. 
+Anda adalah asisten kesehatan yang sangat membantu, tetapi bukan dokter.
 Analisa data kesehatan berikut:
 
 - Berat badan: $beratBadan kg
@@ -33,27 +33,37 @@ Analisa data kesehatan berikut:
 - Langkah hari ini: $jumlahLangkah langkah
 - Catatan: $catatan
 
-Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kategori kurus, ideal, gemuk atau obesitas. Lalu apakah tekanan darah normal, tinggi atau rendah. Detak jantung apakah lambat, sedang atau cepat. Tinggi badan masuk kategori tinggi atau pendek. Dari semua data kehatan yang diberikan, apakah saya dalam kondisi sehat atau tidak sehat. Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat dan berikan saran sederhana (hindari diagnosis medis). Berikan dalam bentuk json dengan struktur sebagai berikut:
+Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kategori kurus, ideal, gemuk atau obesitas. 
+Lalu apakah tekanan darah normal, tinggi atau rendah. 
+Detak jantung apakah lambat, sedang atau cepat. 
+Tinggi badan masuk kategori tinggi atau pendek. 
+Dari semua data kesehatan yang diberikan, apakah saya dalam kondisi sehat atau tidak sehat. 
+Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat, dan berikan saran sederhana (hindari diagnosis medis). 
+Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur berikut:
 
-- ringkasan
--- berat_badan
--- tekanan_darah
--- detak_jantung
--- tinggi_badan
--- suhu_tubuh
--- aktivitas_harian
-- kondisi_kesehatan
-- kemungkinan_masalah
-- saran
-    ''';
+{
+  "ringkasan": {
+    "berat_badan": "",
+    "tekanan_darah": "",
+    "detak_jantung": "",
+    "tinggi_badan": "",
+    "suhu_tubuh": "",
+    "aktivitas_harian": ""
+  },
+  "kondisi_kesehatan": "",
+  "kemungkinan_masalah": "",
+  "saran": ""
+}
+''';
   }
 
   @override
   void onInit() {
     super.onInit();
-    if (arguments['type'] == 'baru') {
+    final type = arguments['type'];
+    if (type == 'baru') {
       analyze();
-    } else if (arguments['type'] == 'detail') {
+    } else if (type == 'detail') {
       loadDetailKesehatan();
     } else {
       loadDataAnalisa();
@@ -79,59 +89,90 @@ Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kateg
           OpenAIChatCompletionChoiceMessageModel(
             role: OpenAIChatMessageRole.user,
             content: [
-              OpenAIChatCompletionChoiceMessageContentItemModel.text(
-                promptText(),
-              ),
+              OpenAIChatCompletionChoiceMessageContentItemModel.text(promptText()),
             ],
           ),
         ],
-        maxTokens: 500,
+        maxTokens: 800,
         temperature: 0.2,
       );
 
+      // Gabungkan seluruh konten teks yang dikembalikan AI
       final aiText = response.choices.first.message.content?.map((e) => e.text).join(" ").trim() ?? 'Tidak ada jawaban dari AI.';
 
-      analysisResult.value = aiText;
+      // Bersihkan karakter ``` dan json agar bisa di-decode
+      final cleaned = aiText.replaceAll('```', '').replaceAll('json', '').trim();
+
+      // Coba parse JSON hasil analisa AI
+      Map<String, dynamic>? parsed;
+      try {
+        parsed = jsonDecode(cleaned);
+      } catch (e) {
+        print("Gagal decode JSON: $e");
+      }
+
+      // Simpan hasil
+      analysisResult.value = jsonEncode(parsed ??
+          {
+            "text": cleaned
+          });
+
+      // Simpan ke lokal & DB
+      await saveData(parsed ??
+          {
+            "text": cleaned
+          });
     } catch (e) {
       analysisResult.value = 'Terjadi kesalahan: $e';
     } finally {
       isLoading.value = false;
+    }
+  }
 
-      // simpan data
-      dataKesehatan.assignAll({
-        'tanggal': arguments['tanggal'] ?? '',
-        'beratBadan': arguments['beratBadan'] ?? '',
-        'tekananDarah': arguments['tekananDarah'] ?? '',
-        'detakJantung': arguments['detakJantung'] ?? '',
-        'tinggiBadan': arguments['tinggiBadan'] ?? '',
-        'suhuTubuh': arguments['suhuTubuh'] ?? '',
-        'jumlahLangkah': arguments['jumlahLangkah'] ?? '',
-        'catatan': analysisResult.value,
-      });
+  Future<void> saveData(Map<String, dynamic> result) async {
+    final localStorage = UseLocalStorage();
 
-      final localStorage = UseLocalStorage();
-      localStorage.saveData('dataKesehatan', dataKesehatan);
-      localStorage.saveData('catatanKesehatan', analysisResult.value);
+    final data = {
+      'tanggal': arguments['tanggal'] ?? '',
+      'beratBadan': arguments['beratBadan'] ?? '',
+      'tekananDarah': arguments['tekananDarah'] ?? '',
+      'detakJantung': arguments['detakJantung'] ?? '',
+      'tinggiBadan': arguments['tinggiBadan'] ?? '',
+      'suhuTubuh': arguments['suhuTubuh'] ?? '',
+      'jumlahLangkah': arguments['jumlahLangkah'] ?? '',
+      'catatan': result,
+    };
 
-      final userData = localStorage.readData('username');
+    dataKesehatan.assignAll(data);
+
+    localStorage.saveData('dataKesehatan', data);
+    localStorage.saveData('catatanKesehatan', result);
+
+    analysisResultFormatted.value = jsonDecode(analysisResult.value);
+
+    final userData = localStorage.readData('username');
+    if (userData != null) {
       final user = jsonDecode(userData);
 
       await DBHelper.instance.insertDataKesehatan(
         idUser: user['id'],
-        tanggal: arguments['tanggal'] ?? '',
-        beratBadan: arguments['beratBadan'] ?? '',
-        tekananDarah: arguments['tekananDarah'] ?? '',
-        detakJantung: arguments['detakJantung'] ?? '',
-        tinggiBadan: arguments['tinggiBadan'] ?? '',
-        suhuTubuh: arguments['suhuTubuh'] ?? '',
-        jumlahLangkah: arguments['jumlahLangkah'] ?? '',
-        catatan: analysisResult.value,
+        tanggal: data['tanggal'] ?? '',
+        beratBadan: data['beratBadan'] ?? '',
+        tekananDarah: data['tekananDarah'] ?? '',
+        detakJantung: data['detakJantung'] ?? '',
+        tinggiBadan: data['tinggiBadan'] ?? '',
+        suhuTubuh: data['suhuTubuh'] ?? '',
+        jumlahLangkah: data['jumlahLangkah'] ?? '',
+        catatan: jsonEncode(result),
       );
     }
   }
 
   Future<void> loadDetailKesehatan() async {
-    final result = await DBHelper.instance.getDataKesehatanDetail(arguments['id_riwayat'] ?? '');
+    final id = arguments['id_riwayat'];
+    if (id == null) return;
+
+    final result = await DBHelper.instance.getDataKesehatanDetail(id);
     if (result != null) {
       dataKesehatan.assignAll({
         'tanggal': result['tanggal'] ?? '',
@@ -145,6 +186,8 @@ Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kateg
       });
 
       analysisResult.value = result['catatan'] ?? '';
+
+      analysisResultFormatted.value = jsonDecode(analysisResult.value);
     }
   }
 
@@ -152,6 +195,9 @@ Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kateg
     final localStorage = UseLocalStorage();
     final savedData = localStorage.readData('dataKesehatan') ?? {};
     dataKesehatan.assignAll(savedData);
-    analysisResult.value = localStorage.readData('catatanKesehatan') ?? 'kosong';
+
+    final savedNote = localStorage.readData('catatanKesehatan');
+    analysisResult.value = savedNote != null ? jsonEncode(savedNote) : 'kosong';
+    analysisResultFormatted.value = jsonDecode(analysisResult.value);
   }
 }
