@@ -43,15 +43,16 @@ class StatistikView extends GetView<StatistikController> {
               )
             ],
           ).marginOnly(bottom: 20),
-          Obx(
-            () {
-              if (controller.isLoading.value) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                ).marginOnly(top: 12);
-              }
 
-              return Container(
+          // ================= DATA KESEHATAN =================
+          Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              ).marginOnly(top: 12);
+            }
+
+            return Container(
               width: MyDeviceUtils.getScreenWidth(context),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -80,10 +81,37 @@ class StatistikView extends GetView<StatistikController> {
                     InfoItem(
                       leading: const Icon(Icons.calendar_month),
                       title: 'Tanggal',
-                      subtitle: formatTanggal(controller.dataKesehatan['tanggal']?.toString() ?? '-'),
+                      subtitle: formatTanggal(
+                        controller.dataKesehatan['tanggal']?.toString() ?? '-',
+                      ),
                     ).marginOnly(bottom: 8),
 
                     // --- Row 1 ---
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: InfoItem(
+                          leading: const Icon(Icons.accessibility_new_sharp),
+                          title: 'Usia',
+                          subtitle: '${controller.user['usia'] ?? '-'} tahun',
+                        )),
+                        Expanded(
+                          child: InfoItem(
+                            leading: const Icon(Icons.waves_rounded),
+                            title: 'Laju Pernafasan',
+                            subtitle: '${controller.dataKesehatan['lajuPernafasan'] ?? '-'} / menit',
+                          ),
+                        ),
+                        Expanded(
+                            child: Text(
+                          '-',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      ],
+                    ).marginOnly(bottom: 8),
+
+                    // --- Row 2 ---
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -111,7 +139,7 @@ class StatistikView extends GetView<StatistikController> {
                       ],
                     ).marginOnly(bottom: 8),
 
-                    // --- Row 2 ---
+                    // --- Row 3 ---
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -141,9 +169,10 @@ class StatistikView extends GetView<StatistikController> {
                   ],
                 ),
               ),
-              );
-            },
-          ).marginOnly(bottom: 24),
+            );
+          }).marginOnly(bottom: 24),
+
+          // ================= HASIL ANALISA =================
           Obx(() {
             if (controller.isLoading.value) {
               return const Center(
@@ -152,10 +181,18 @@ class StatistikView extends GetView<StatistikController> {
             }
 
             final data = controller.analysisResultFormatted.value;
-
             if (data == null) {
               return const Text('Belum ada hasil analisis.');
             }
+
+            // Ambil semua nilai ringkasan untuk perhitungan kondisi_kesehatan
+            final ringkasan = Map<String, String>.from(data['ringkasan'] ?? {});
+            final kondisiText = getKondisiKesehatan(ringkasan);
+            final kondisiColor = getHealthColor(
+              'kondisi_kesehatan',
+              kondisiText,
+              allValues: ringkasan,
+            );
 
             return Container(
               width: MyDeviceUtils.getScreenWidth(context),
@@ -164,7 +201,7 @@ class StatistikView extends GetView<StatistikController> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
-                padding: EdgeInsetsGeometry.all(14),
+                padding: const EdgeInsets.all(14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -180,34 +217,41 @@ class StatistikView extends GetView<StatistikController> {
                       ),
                     ),
                     Divider(
-                      color: Colors.grey.withValues(alpha: .5),
+                      color: Colors.grey.withOpacity(0.5),
                       thickness: 1,
                     ).marginOnly(bottom: 4),
+
+                    // Kondisi + Berat Badan
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Align(
-                            alignment: AlignmentGeometry.centerLeft,
+                            alignment: Alignment.centerLeft,
                             child: InfoBadge(
                               title: 'Kondisi',
-                              subtitle: '${data['kondisi_kesehatan']}',
-                              color: getHealthColor('kondisi_kesehatan', data['kondisi_kesehatan']),
+                              subtitle: kondisiText,
+                              color: kondisiColor,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Align(
-                            alignment: AlignmentGeometry.centerLeft,
+                            alignment: Alignment.centerLeft,
                             child: InfoBadge(
                               title: 'Berat Badan',
-                              subtitle: '${data['ringkasan']['berat_badan']}',
-                              color: getHealthColor('berat_badan', data['ringkasan']['berat_badan']),
+                              subtitle: '${ringkasan['berat_badan']}',
+                              color: getHealthColor(
+                                'berat_badan',
+                                ringkasan['berat_badan'] ?? '',
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ).marginOnly(bottom: 8),
+
+                    // Tekanan Darah + Detak Jantung
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -216,8 +260,11 @@ class StatistikView extends GetView<StatistikController> {
                             alignment: Alignment.centerLeft,
                             child: InfoBadge(
                               title: 'Tekanan Darah',
-                              subtitle: '${data['ringkasan']['tekanan_darah']}',
-                              color: getHealthColor('tekanan_darah', data['ringkasan']['tekanan_darah']),
+                              subtitle: '${ringkasan['tekanan_darah']}',
+                              color: getHealthColor(
+                                'tekanan_darah',
+                                ringkasan['tekanan_darah'] ?? '',
+                              ),
                             ),
                           ),
                         ),
@@ -226,13 +273,70 @@ class StatistikView extends GetView<StatistikController> {
                             alignment: Alignment.centerLeft,
                             child: InfoBadge(
                               title: 'Detak Jantung',
-                              subtitle: '${data['ringkasan']['detak_jantung']}',
-                              color: getHealthColor('detak_jantung', data['ringkasan']['detak_jantung']),
+                              subtitle: '${ringkasan['detak_jantung']}',
+                              color: getHealthColor(
+                                'detak_jantung',
+                                ringkasan['detak_jantung'] ?? '',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ).marginOnly(bottom: 8),
+
+                    // Suhu Tubuh + Jumlah Langkah
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InfoBadge(
+                              title: 'Suhu Tubuh',
+                              subtitle: '${ringkasan['suhu_tubuh']}',
+                              color: getHealthColor(
+                                'tekanan_darah',
+                                ringkasan['tekanan_darah'] ?? '',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InfoBadge(
+                              title: 'Jumlah Langkah',
+                              subtitle: '${ringkasan['langkah']}',
+                              color: getHealthColor(
+                                'langkah',
+                                ringkasan['langkah'] ?? '',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ).marginOnly(bottom: 8),
+
+                    // Laju Pernafasan
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: InfoBadge(
+                              title: 'Laju Pernafasan',
+                              subtitle: '${ringkasan['laju_pernafasan']}',
+                              color: getHealthColor(
+                                'laju_pernafasan',
+                                ringkasan['laju_pernafasan'] ?? '',
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ).marginOnly(bottom: 24),
+
                     const Text(
                       'Kemungkinan Masalah',
                       style: TextStyle(
@@ -241,13 +345,17 @@ class StatistikView extends GetView<StatistikController> {
                       ),
                     ),
                     Divider(
-                      color: Colors.grey.withValues(alpha: .5),
+                      color: Colors.grey.withOpacity(0.5),
                       thickness: 1,
                     ),
                     Text(
                       data['kemungkinan_masalah'],
-                      style: TextStyle(fontSize: 13, color: const Color.fromARGB(255, 85, 85, 85)),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 85, 85, 85),
+                      ),
                     ).marginOnly(bottom: 12),
+
                     const Text(
                       'Saran',
                       style: TextStyle(
@@ -256,12 +364,15 @@ class StatistikView extends GetView<StatistikController> {
                       ),
                     ),
                     Divider(
-                      color: Colors.grey.withValues(alpha: .5),
+                      color: Colors.grey.withOpacity(0.5),
                       thickness: 1,
                     ),
                     Text(
                       data['saran'],
-                      style: TextStyle(fontSize: 13, color: const Color.fromARGB(255, 85, 85, 85)),
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 85, 85, 85),
+                      ),
                     ),
                   ],
                 ),

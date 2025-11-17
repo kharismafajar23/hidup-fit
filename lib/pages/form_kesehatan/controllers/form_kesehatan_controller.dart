@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/routes/app_routes.dart';
 import 'package:hidup_fit/utils/local_storage/storage_utility.dart';
-import 'package:intl/intl.dart';
 
 class FormKesehatanController extends GetxController {
 
@@ -37,6 +36,10 @@ class FormKesehatanController extends GetxController {
   RxBool validateJumlahLangkah = true.obs;
   RxString msgJumlahLangkah = "".obs;
 
+  TextEditingController pernafasanController = TextEditingController();
+  RxBool validatePernafasan = true.obs;
+  RxString msgPernafasan = "".obs;
+
   TextEditingController catatanController = TextEditingController();
   RxString msgCatatan = "".obs;
 
@@ -67,6 +70,7 @@ class FormKesehatanController extends GetxController {
       String valueTinggiBadan = tinggiBadanController.text.toString().trim();
       String valueSuhuTubuh = suhuTubuhController.text.toString().trim();
       String valueJumlahLangkah = jumlahLangkahController.text.toString().trim();
+      String valuePernafasan = pernafasanController.text.toString().trim();
       String catatan = catatanController.text.toString().trim();
 
       if (valueBeratBadan.isEmpty) {
@@ -116,14 +120,20 @@ class FormKesehatanController extends GetxController {
         validateJumlahLangkah.value = true;
         msgJumlahLangkah.value = "";
       }
+
+      if (valuePernafasan.isEmpty) {
+        validatePernafasan.value = false;
+        msgPernafasan.value = "Hitungan pernafasan harus di isi";
+      } else {
+        validatePernafasan.value = true;
+        msgPernafasan.value = "";
+      }
     }
 
-    return validateTanggal.value && validateBeratBadan.value && validateTekananDarah.value && validateDetakJantung.value && validateTinggiBadan.value && validateSuhuTubuh.value && validateJumlahLangkah.value;
+    return validateTanggal.value && validateBeratBadan.value && validateTekananDarah.value && validateDetakJantung.value && validateTinggiBadan.value && validateSuhuTubuh.value && validateJumlahLangkah.value && validatePernafasan.value;
   }
 
   Future analisaKesehatan() async {
-    print('######################');
-    print(tanggalController.text.toString().trim());
     isValidateFirst.value = true;
     bool validation = await onValidationFormInput(null);
 
@@ -137,6 +147,7 @@ class FormKesehatanController extends GetxController {
         'tinggiBadan': tinggiBadanController.text.toString().trim(),
         'suhuTubuh': suhuTubuhController.text.toString().trim(),
         'jumlahLangkah': jumlahLangkahController.text.toString().trim(),
+        'lajuPernafasan': pernafasanController.text.toString().trim(),
         'catatan': catatanController.text.toString().trim()
       };
 

@@ -14,30 +14,63 @@ class DBHelper {
     return _database!;
   }
 
-  // ============================================================
+  // =====================================================================
   // INIT DATABASE
-  // ============================================================
+  // =====================================================================
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'app.db'),
-      version: 9, 
+      version: 12,
       onCreate: (db, version) async {
         await _createTables(db);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        // Tambah kolom "jenis_kelamin" di users
         if (oldVersion < 7) {
-          await db.execute("ALTER TABLE users ADD COLUMN jenis_kelamin TEXT");
+          await _safeAddColumn(
+            db,
+            table: "users",
+            column: "jenis_kelamin",
+            type: "TEXT",
+          );
         }
-        await _createTables(db);
-      },
 
+        // Tambah kolom "laju_pernafasan" di dataKesehatan
+        if (oldVersion < 10) {
+          await _safeAddColumn(
+            db,
+            table: "dataKesehatan",
+            column: "laju_pernafasan",
+            type: "TEXT",
+          );
+        }
+      },
     );
   }
 
-  // ============================================================
+  // =====================================================================
+  // SAFE ADD COLUMN (ANTI DUPLICATE)
+  // =====================================================================
+  Future<void> _safeAddColumn(
+    Database db, {
+    required String table,
+    required String column,
+    required String type,
+  }) async {
+    // ambil info table
+    final columns = await db.rawQuery("PRAGMA table_info($table)");
+
+    final exist = columns.any((col) => col['name'] == column);
+
+    if (!exist) {
+      await db.execute("ALTER TABLE $table ADD COLUMN $column $type");
+    }
+  }
+
+  // =====================================================================
   // CREATE TABLES
-  // ============================================================
+  // =====================================================================
   Future<void> _createTables(Database db) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users(
@@ -70,6 +103,7 @@ class DBHelper {
         tinggi_badan TEXT,
         suhu_tubuh TEXT,
         jumlah_langkah TEXT,
+        laju_pernafasan TEXT,
         catatan TEXT
       )
     ''');
@@ -87,9 +121,9 @@ class DBHelper {
     ''');
   }
 
-  // ============================================================
-  // UTIL
-  // ============================================================
+  // =====================================================================
+  // RESET DATABASE
+  // =====================================================================
   Future<void> resetDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'app.db');
@@ -97,9 +131,9 @@ class DBHelper {
     _database = null;
   }
 
-  // ============================================================
+  // =====================================================================
   // USERS
-  // ============================================================
+  // =====================================================================
   Future<void> insertUser(
     String name,
     String tanggalLahir,
@@ -167,9 +201,9 @@ class DBHelper {
     return result.isNotEmpty ? result.first : null;
   }
 
-  // ============================================================
+  // =====================================================================
   // ARTICLES
-  // ============================================================
+  // =====================================================================
   static Future<void> insertArticle(Article article) async {
     final db = await instance.database;
     await db.insert('articles', article.toMap());
@@ -186,9 +220,9 @@ class DBHelper {
     await db.delete('articles');
   }
 
-  // ============================================================
+  // =====================================================================
   // RUMAH SAKIT
-  // ============================================================
+  // =====================================================================
   static Future<void> insertRumahSakit(RumahSakit rumahSakit) async {
     final db = await instance.database;
     await db.insert(
@@ -204,9 +238,9 @@ class DBHelper {
     return List.generate(maps.length, (i) => RumahSakit.fromMap(maps[i]));
   }
 
-  // ============================================================
+  // =====================================================================
   // DATA KESEHATAN
-  // ============================================================
+  // =====================================================================
   Future<void> insertDataKesehatan({
     required int idUser,
     String? tanggal,
@@ -216,19 +250,21 @@ class DBHelper {
     String? tinggiBadan,
     String? suhuTubuh,
     String? jumlahLangkah,
+    String? lajuPernafasan,
     String? catatan,
   }) async {
     final db = await instance.database;
-    final now = tanggal ?? DateTime.now().toIso8601String();
+
     await db.insert('dataKesehatan', {
       'id_user': idUser,
-      'tanggal': now,
+      'tanggal': tanggal ?? DateTime.now().toIso8601String(),
       'berat_badan': beratBadan ?? '',
       'tekanan_darah': tekananDarah ?? '',
       'detak_jantung': detakJantung ?? '',
       'tinggi_badan': tinggiBadan ?? '',
       'suhu_tubuh': suhuTubuh ?? '',
       'jumlah_langkah': jumlahLangkah ?? '',
+      'laju_pernafasan': lajuPernafasan ?? '',
       'catatan': catatan ?? '',
     });
   }

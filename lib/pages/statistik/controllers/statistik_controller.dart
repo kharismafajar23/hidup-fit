@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:get/get.dart';
 import 'package:hidup_fit/data/services/db_helper.dart';
+import 'package:hidup_fit/data/services/hitung_usia.dart';
 import 'package:hidup_fit/utils/local_storage/storage_utility.dart';
 
 class StatistikController extends GetxController {
   final Map<String, dynamic> arguments = Get.arguments ?? {};
 
   final isLoading = false.obs;
+  var user = {}.obs;
   final dataKesehatan = <String, dynamic>{}.obs;
   final analysisResult = ''.obs;
   final analysisResultFormatted = Rxn<Map<String, dynamic>>();
@@ -19,6 +21,7 @@ class StatistikController extends GetxController {
     final tinggiBadan = arguments['tinggiBadan'] ?? 'tidak diberikan';
     final suhuTubuh = arguments['suhuTubuh'] ?? 'tidak diberikan';
     final jumlahLangkah = arguments['jumlahLangkah'] ?? 'tidak diberikan';
+    final lajuPernafasan = arguments['lajuPernafasan'] ?? 'tidak diberikan';
     final catatan = arguments['catatan'] ?? '-';
 
     return '''
@@ -31,12 +34,17 @@ Analisa data kesehatan berikut:
 - Tinggi badan: $tinggiBadan cm
 - Suhu tubuh: $suhuTubuh °C
 - Langkah hari ini: $jumlahLangkah langkah
+- Laju pernafasan: $lajuPernafasan napas/menit
+- Usia: ${user['usia']}
 - Catatan: $catatan
 
 Berikan ringkasan singkat dalam bahasa Indonesia, apakah berat badan dalam kategori kurus, ideal, gemuk atau obesitas. 
 Lalu apakah tekanan darah normal, tinggi atau rendah. 
 Detak jantung apakah lambat, sedang atau cepat. 
-Tinggi badan masuk kategori tinggi atau pendek. 
+Tinggi badan masuk kategori tinggi atau pendek.
+Langkah termasuk kurang, cukup atau lebih.
+Suhu tubuh termasuk rendah, tinggi atau normal.
+Laju pernafasan termasuk lambat, normal atau cepat. 
 Dari semua data kesehatan yang diberikan, apakah saya dalam kondisi sehat atau tidak sehat. 
 Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat, dan berikan saran sederhana (hindari diagnosis medis). 
 Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur berikut:
@@ -48,7 +56,9 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
     "detak_jantung": "",
     "tinggi_badan": "",
     "suhu_tubuh": "",
-    "aktivitas_harian": ""
+    "aktivitas_harian": "",
+    "langkah": "",
+    "laju_pernafasan": ""
   },
   "kondisi_kesehatan": "",
   "kemungkinan_masalah": "",
@@ -60,6 +70,7 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
   @override
   void onInit() {
     super.onInit();
+    loadUser();
     final type = arguments['type'];
     if (type == 'baru') {
       analyze();
@@ -67,6 +78,21 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
       loadDetailKesehatan();
     } else {
       loadDataAnalisa();
+    }
+  }
+
+  loadUser() {
+    final localStorage = UseLocalStorage();
+    final userData = localStorage.readData('username');
+
+    if (userData != null) {
+      final decoded = jsonDecode(userData);
+      final umur = hitungUsia(decoded['tanggal_lahir'] ?? '');
+      decoded['usia'] = umur.toString();
+
+      user.value = decoded;
+    } else {
+      user.value = {};
     }
   }
 
@@ -93,7 +119,7 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
             ],
           ),
         ],
-        maxTokens: 800,
+        maxTokens: 900,
         temperature: 0.2,
       );
 
@@ -140,6 +166,7 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
       'tinggiBadan': arguments['tinggiBadan'] ?? '',
       'suhuTubuh': arguments['suhuTubuh'] ?? '',
       'jumlahLangkah': arguments['jumlahLangkah'] ?? '',
+      'lajuPernafasan': arguments['lajuPernafasan'] ?? '',
       'catatan': result,
     };
 
@@ -163,6 +190,7 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
         tinggiBadan: data['tinggiBadan'] ?? '',
         suhuTubuh: data['suhuTubuh'] ?? '',
         jumlahLangkah: data['jumlahLangkah'] ?? '',
+        lajuPernafasan: data['lajuPernafasan'] ?? '',
         catatan: jsonEncode(result),
       );
     }
@@ -182,6 +210,7 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
         'tinggiBadan': result['tinggi_badan'] ?? '',
         'suhuTubuh': result['suhu_tubuh'] ?? '',
         'jumlahLangkah': result['jumlah_langkah'] ?? '',
+        'lajuPernafasan': result['laju_pernafasan'] ?? '',
         'catatan': result['catatan'] ?? '',
       });
 
