@@ -132,7 +132,7 @@ class StatistikView extends GetView<StatistikController> {
                         Expanded(
                           child: InfoItem(
                             leading: const Icon(Icons.monitor_heart_outlined),
-                            title: 'Detak Jantung',
+                            title: 'Denyut Nadi',
                             subtitle: '${controller.dataKesehatan['detakJantung'] ?? '-'} bpm',
                           ),
                         ),
@@ -251,7 +251,7 @@ class StatistikView extends GetView<StatistikController> {
                       ],
                     ).marginOnly(bottom: 8),
 
-                    // Tekanan Darah + Detak Jantung
+                    // Tekanan Darah + Denyut Nadi
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -272,7 +272,7 @@ class StatistikView extends GetView<StatistikController> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: InfoBadge(
-                              title: 'Detak Jantung',
+                              title: 'Denyut Nadi',
                               subtitle: '${ringkasan['detak_jantung']}',
                               color: getHealthColor(
                                 'detak_jantung',
@@ -295,8 +295,8 @@ class StatistikView extends GetView<StatistikController> {
                               title: 'Suhu Tubuh',
                               subtitle: '${ringkasan['suhu_tubuh']}',
                               color: getHealthColor(
-                                'tekanan_darah',
-                                ringkasan['tekanan_darah'] ?? '',
+                                'suhu_tubuh',
+                                ringkasan['suhu_tubuh'] ?? '',
                               ),
                             ),
                           ),

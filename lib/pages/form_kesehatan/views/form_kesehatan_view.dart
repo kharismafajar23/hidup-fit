@@ -59,13 +59,12 @@ class FormKesehatanView extends GetView<FormKesehatanController> {
                   labelText: 'Tekanan Darah (mmHg)',
                   errorText: !controller.validateTekananDarah.value ? controller.msgTekananDarah.value : null,
                 ),
-                keyboardType: TextInputType.numberWithOptions(),
               ).marginOnly(bottom: 8),
               TextField(
                 controller: controller.detakJantungController,
                 onChanged: controller.onValidationFormInput,
                 decoration: InputDecoration(
-                  labelText: 'Detak Jantung (bpm)',
+                  labelText: 'Denyut Nadi (bpm)',
                   errorText: !controller.validateDetakJantung.value ? controller.msgDetakJantung.value : null,
                 ),
                 keyboardType: TextInputType.numberWithOptions(),
