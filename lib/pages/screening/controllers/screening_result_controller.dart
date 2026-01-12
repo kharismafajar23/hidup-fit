@@ -30,10 +30,8 @@ class ScreeningResultController extends GetxController {
 
     buffer.writeln("""
 Buatkan:
-1. Ringkasan kondisi kesehatan
-2. Risiko per penyakit
-3. Saran tindak lanjut
-4. Disclaimer medis
+Ringkasan kondisi kesehatan secara keseluruhan dengan singkat, dengan template sebagai berikut:
+Menurut hasil screening yang telan Anda isi sebelumnya. Hasilnya adalah ['hasilnya disini'].
 """);
 
     return buffer.toString();

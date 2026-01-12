@@ -25,6 +25,7 @@ class ScreeningResultView extends GetView<ScreeningResultController> {
                 controller.analysisResult.value,
                 style: TextStyle(color: MyColors.textPrimary, fontWeight: FontWeight.w300),
               ),
+              Text('Jika ingin mendapat hasil yang lebih detail, silahkan kunjungi klinik kesehatan terdekat').marginOnly(top: 16),
               Text('Anda telah terdaftar sebagai pengguna HidupFit').marginOnly(top: 16),
             ],
           ).paddingAll(12),
