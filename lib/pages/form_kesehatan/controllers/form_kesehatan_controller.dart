@@ -4,7 +4,6 @@ import 'package:hidup_fit/routes/app_routes.dart';
 import 'package:hidup_fit/utils/local_storage/storage_utility.dart';
 
 class FormKesehatanController extends GetxController {
-
   RxBool isValidateFirst = false.obs;
   RxBool isValidAll = false.obs;
 
@@ -115,7 +114,7 @@ class FormKesehatanController extends GetxController {
 
       if (valueJumlahLangkah.isEmpty) {
         validateJumlahLangkah.value = false;
-        msgJumlahLangkah.value = "Suhu tubuh harus di isi";
+        msgJumlahLangkah.value = "Jumlah langkah harus di isi";
       } else {
         validateJumlahLangkah.value = true;
         msgJumlahLangkah.value = "";
@@ -155,7 +154,6 @@ class FormKesehatanController extends GetxController {
       localStorage.saveData('dataKesehatan', dataKesehatan);
 
       Get.toNamed(AppRoutes.statistikKesehatan, arguments: dataKesehatan);
-
     } else {
       Get.snackbar('Gagal', 'Silahkan isi semua bagian terlebih dahulu', backgroundColor: Colors.red, icon: Icon(Icons.error_outlined));
     }

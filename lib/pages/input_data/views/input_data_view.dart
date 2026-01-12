@@ -26,7 +26,9 @@ class InputDataView extends GetView<InputDataController> {
               ),
               subtitle: ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(AppRoutes.statistikKesehatan);
+                  Get.toNamed(AppRoutes.statistikKesehatan, arguments: {
+                    'type': 'cek'
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   side: BorderSide(color: MyColors.gold),
@@ -55,6 +57,19 @@ class InputDataView extends GetView<InputDataController> {
               ),
             ),
           ).marginOnly(bottom: 12),
+          Card(
+            color: MyColors.accent,
+            child: ListTile(
+              onTap: () {
+                Get.toNamed(AppRoutes.screeningEntry);
+              },
+              leading: Icon(
+                Icons.person_search_rounded,
+                size: 32,
+              ),
+              title: Text('Screening kesehatan'),
+            ),
+          ),
           Card(
             color: MyColors.accent,
             child: ListTile(

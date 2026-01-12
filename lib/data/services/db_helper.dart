@@ -21,7 +21,7 @@ class DBHelper {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'app.db'),
-      version: 12,
+      version: 13,
       onCreate: (db, version) async {
         await _createTables(db);
       },
@@ -44,6 +44,19 @@ class DBHelper {
             column: "laju_pernafasan",
             type: "TEXT",
           );
+        }
+
+        if (oldVersion < 13) {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS screening_results (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              id_user INTEGER NOT NULL,
+              tanggal TEXT NOT NULL DEFAULT (datetime('now')),
+              prompt TEXT,
+              hasil TEXT,
+              model TEXT
+            )
+          ''');
         }
       },
     );
@@ -119,6 +132,15 @@ class DBHelper {
         kontak TEXT
       )
     ''');
+
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS screening_results (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id_user INTEGER NOT NULL,
+      tanggal TEXT NOT NULL DEFAULT (datetime('now')),
+      hasil TEXT,
+    )
+  ''');
   }
 
   // =====================================================================
@@ -296,4 +318,55 @@ class DBHelper {
 
     return result.isNotEmpty ? result.first : null;
   }
+
+  // =====================================================================
+  // SCREENING RESULT (AI)
+  // =====================================================================
+  Future<void> insertScreeningResult({
+    required int idUser,
+    required String hasil,
+    String? tanggal,
+  }) async {
+    final db = await instance.database;
+
+    await db.insert('screening_results', {
+      'id_user': idUser,
+      'tanggal': tanggal ?? DateTime.now().toIso8601String(),
+      'hasil': hasil,
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getScreeningHistory(
+    int userId, {
+    int limit = 5,
+  }) async {
+    final db = await instance.database;
+
+    return await db.query(
+      'screening_results',
+      where: 'id_user = ?',
+      whereArgs: [
+        userId
+      ],
+      orderBy: 'tanggal DESC',
+      limit: limit,
+    );
+  }
+
+  Future<Map<String, dynamic>?> getLastScreeningResult(int userId) async {
+    final db = await instance.database;
+
+    final result = await db.query(
+      'screening_results',
+      where: 'id_user = ?',
+      whereArgs: [
+        userId
+      ],
+      orderBy: 'tanggal DESC',
+      limit: 1,
+    );
+
+    return result.isNotEmpty ? result.first : null;
+  }
+
 }

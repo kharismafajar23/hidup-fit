@@ -16,4 +16,7 @@ class AppRoutes {
   static const editProfile = '/edit-profile';
   static const verifikasiOTP = '/verifikasi-otp';
   static const bottomNavigationMenu = '/bottom-navigation-menu';
+  static const screening = '/screening';
+  static const screeningEntry = '/screening-entry';
+  static const screeningResult = '/screening-result';
 }

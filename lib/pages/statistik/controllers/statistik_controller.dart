@@ -6,7 +6,7 @@ import 'package:hidup_fit/data/services/hitung_usia.dart';
 import 'package:hidup_fit/utils/local_storage/storage_utility.dart';
 
 class StatistikController extends GetxController {
-  final Map<String, dynamic> arguments = Get.arguments ?? {};
+  var arguments = Get.arguments ?? {};
 
   final isLoading = false.obs;
   var user = {}.obs;
@@ -46,7 +46,7 @@ Langkah termasuk kurang, cukup atau lebih.
 Suhu tubuh termasuk rendah, tinggi atau normal.
 Laju pernafasan termasuk lambat, normal atau cepat. 
 Dari semua data kesehatan yang diberikan, apakah saya dalam kondisi sehat atau tidak sehat. 
-Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat, dan berikan saran sederhana (hindari diagnosis medis). 
+Sebutkan kemungkinan masalah, kondisi kesehatan dengan jawaban sehat atau tidak sehat, dan berikan saran mendetail (hindari diagnosis medis). 
 Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur berikut:
 
 {
@@ -71,7 +71,8 @@ Berikan dalam bentuk JSON valid (bisa di-decode langsung) dengan struktur beriku
   void onInit() {
     super.onInit();
     loadUser();
-    final type = arguments['type'];
+    arguments = Get.arguments;
+    final type = arguments['type'] ?? '-';
     if (type == 'baru') {
       analyze();
     } else if (type == 'detail') {

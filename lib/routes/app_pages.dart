@@ -25,6 +25,12 @@ import 'package:hidup_fit/pages/register/bindings/register_binding.dart';
 import 'package:hidup_fit/pages/register/views/register_view.dart';
 import 'package:hidup_fit/pages/riwayat_kesehatan/bindings/riwayat_kesehatan_binding.dart';
 import 'package:hidup_fit/pages/riwayat_kesehatan/views/riwayat_kesehatan_view.dart';
+import 'package:hidup_fit/pages/screening/bindings/screening_binding.dart';
+import 'package:hidup_fit/pages/screening/bindings/screening_entry_binding.dart';
+import 'package:hidup_fit/pages/screening/bindings/screening_result_binding.dart';
+import 'package:hidup_fit/pages/screening/views/screening_entry_view.dart';
+import 'package:hidup_fit/pages/screening/views/screening_result_view.dart';
+import 'package:hidup_fit/pages/screening/views/screening_view.dart';
 import 'package:hidup_fit/pages/splash_screen/bindings/splash_screen_binding.dart';
 import 'package:hidup_fit/pages/splash_screen/views/splash_screen_view.dart';
 import 'package:hidup_fit/pages/statistik/bindings/statistik_bindings.dart';
@@ -122,6 +128,21 @@ class AppPages {
       name: AppRoutes.bottomNavigationMenu,
       page: () => NavigationMenuView(),
       binding: NavigationMenuBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.screening,
+      page: () => ScreeningView(),
+      binding: ScreeningBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.screeningEntry,
+      page: () => ScreeningEntryView(),
+      binding: ScreeningEntryBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.screeningResult,
+      page: () => ScreeningResultView(),
+      binding: ScreeningResultBinding(),
     ),
   ];
 }
